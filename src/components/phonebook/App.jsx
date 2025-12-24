@@ -146,6 +146,7 @@ const App = () => {
   }
 
   const handleSubmit = (e) => {
+    console.log('handleSubmit called')  
     let message = null
     let style = 'notification'
 
@@ -157,15 +158,33 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+    console.log('newPerson',newPerson)
+    servicesPersons
+      .add(newPerson)
+      .then(status => {
+        console.log('add person', status)
 
-    if (persons.find(person => person.number === newNumber)) {
-      message = `A contact with this number already exist: ${newNumber}`
-      style = 'error'
-      console.log(message)
-      showMessage(message, 'error')
-      return
-    }
+        if (status === 201) {
+          message = `Added new contact ${newPerson.name}`
+        }
 
+        if (status === 206) {
+          message = `Updated contact ${newPerson.name}`
+        }
+
+        if (status === 201 || status === 206) {
+          getPersons()
+        } else {
+          message = `A contact with this number already exist: ${newNumber}`
+          style = 'error'
+          console.log('error',status,message)
+        }
+        showMessage(message, style)  
+      })
+    console.log('after servicesPersons.add')
+
+
+/*
     if (!persons.find(person => person.name === newName)) {
       servicesPersons
         .add(newPerson)
@@ -215,7 +234,7 @@ const App = () => {
           showMessage(message, style)              
         }
     }
-
+*/
     setNewName('')
     setNewNumber('')
   }

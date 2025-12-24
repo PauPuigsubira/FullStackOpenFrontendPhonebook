@@ -43,10 +43,16 @@ const add = (newPerson) => {
       body: JSON.stringify(newPerson)
     }
   )
-  .then(responsePromise => responsePromise.json())
-  .then(responseJSON => { 
-    return responseJSON
-  })
+  .then(responsePromise => responsePromise.status)
+  // .then(responsePromise => {
+  //   return {
+  //     status: responsePromise.status,
+  //     data: responsePromise.json()
+  //   }
+  // })
+  // .then(responseJSON => { 
+  //   return responseJSON
+  // })
 }
 
 const remove = (id) => {
@@ -87,7 +93,7 @@ const update = (objPerson) => {
   }
 
   return fetch(
-    server+service+item,
+    baseUrl+item,
     {
       method: 'PUT',
       headers: {
