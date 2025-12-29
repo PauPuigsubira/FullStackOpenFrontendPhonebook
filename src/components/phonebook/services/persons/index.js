@@ -43,7 +43,21 @@ const add = (newPerson) => {
       body: JSON.stringify(newPerson)
     }
   )
-  .then(responsePromise => responsePromise.status)
+  .then(responsePromise => {
+    return responsePromise.json()
+      .then(data => {
+        const response = {
+          status: responsePromise.status,
+          data: data
+        }
+        console.log('response tras json', response)
+        return response
+      })
+  })
+  .catch(error => {
+    console.log('error de service',error)
+    //console.log(error.json().response.data.error)
+  })
   // .then(responsePromise => {
   //   return {
   //     status: responsePromise.status,

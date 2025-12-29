@@ -161,8 +161,9 @@ const App = () => {
     console.log('newPerson',newPerson)
     servicesPersons
       .add(newPerson)
-      .then(status => {
-        console.log('add person', status)
+      .then((response) => {
+        const {status, data} = response
+        console.log('add person response', response,'status', status, 'data', data )
 
         if (status === 201) {
           message = `Added new contact ${newPerson.name}`
@@ -175,12 +176,23 @@ const App = () => {
         if (status === 201 || status === 206) {
           getPersons()
         } else {
-          message = `A contact with this number already exist: ${newNumber}`
           style = 'error'
-          console.log('error',status,message)
+          message = data.error
+          console.log('error message',message)
+/*
+          if (status === 409) {
+            message = `A contact with this number already exist: ${newNumber}`
+            console.log('error',status,message)
+  
+          } else {
+            message=`An error occurred at adding person ${newPerson.name}. Status ${status}`
+            console.log('error',status,message)
+          }
+*/
         }
         showMessage(message, style)  
       })
+
     console.log('after servicesPersons.add')
 
 
